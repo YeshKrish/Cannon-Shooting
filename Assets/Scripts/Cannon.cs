@@ -41,7 +41,6 @@ public class Cannon : MonoBehaviour
         mousePos.z = -Camera.main.transform.position.z;
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos);
 
-
         Vector3 cannonToMouse = mouseWorldPos - cannonTransform.position;
         cannonToMouse.y = 0f;
 
@@ -58,7 +57,11 @@ public class Cannon : MonoBehaviour
         float distancex = Mathf.Abs(mouseWorldPos.x - _firePoint.position.x);
         float distancey = Mathf.Abs(mouseWorldPos.y - _firePoint.position.y);
         float distancez = Mathf.Abs(mouseWorldPos.z - _firePoint.position.z);
-        Debug.Log(distancex);
+        Debug.Log(distancey);
+        if(distancey > 7.7f)
+        {
+            distancey = 6.5f;
+        }
         UpdateLineRenderer();
 
         if (Input.GetMouseButtonDown(0))
