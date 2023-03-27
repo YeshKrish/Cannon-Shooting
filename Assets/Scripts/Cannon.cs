@@ -5,13 +5,28 @@ using UnityEngine;
 public class Cannon : MonoBehaviour
 {
     public Transform cannonTransform;
+    [SerializeField]
+    private GameObject _cannonBall;
+    [SerializeField]
+    private Transform _firePoint;
     private Camera _cam;
     private bool _isMousePressed = false;
 
+    private int _ballsToSpawn = 10;
+    private List<GameObject> _balls = new List<GameObject>();
+
+    public float Power = 12.0f;
 
     void Start()
     {
         _cam = Camera.main;
+
+        for(int i = 0; i < _ballsToSpawn; i++)
+        {
+            GameObject cannonBall = Instantiate(_cannonBall);
+            cannonBall.SetActive(false);
+            _balls.Add(cannonBall);
+        }
     }
 
 
@@ -32,5 +47,31 @@ public class Cannon : MonoBehaviour
 
         cannonTransform.rotation = targetRotation;
 
+        Vector3 FirePointToMousePointDist = (mousePos - _firePoint.position);
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            GameObject cannonBall = GetBall();
+            cannonBall.transform.position = _firePoint.position;
+            cannonBall.transform.rotation = _firePoint.rotation;
+
+            Rigidbody rb = cannonBall.GetComponent<Rigidbody>();
+
+            rb.velocity = Power * _firePoint.forward;
+        }
     }
+
+    private GameObject GetBall()
+    {
+        foreach (GameObject balls in _balls)
+        {
+            if(balls.activeSelf == false)
+            {
+                balls.SetActive(true);
+                return balls;
+            }
+        }
+        return null;
+    }
+
 }
