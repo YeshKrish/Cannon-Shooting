@@ -9,17 +9,22 @@ public class Cannon : MonoBehaviour
     private GameObject _cannonBall;
     [SerializeField]
     private Transform _firePoint;
-    private Camera _cam;
-    private bool _isMousePressed = false;
+    [SerializeField]
+    private LineRenderer _lineRenderer;
 
     private int _ballsToSpawn = 10;
     private List<GameObject> _balls = new List<GameObject>();
 
-    public float Power = 12.0f;
+    public float Power = 1.0f;
+
+    private const int N_TRAJECTORY_POINTS = 10;
+
+    private Vector3 _initialVelocity;
 
     void Start()
     {
-        _cam = Camera.main;
+
+        _lineRenderer.positionCount = N_TRAJECTORY_POINTS;
 
         for(int i = 0; i < _ballsToSpawn; i++)
         {
@@ -47,7 +52,14 @@ public class Cannon : MonoBehaviour
 
         cannonTransform.rotation = targetRotation;
 
-        Vector3 FirePointToMousePointDist = (mousePos - _firePoint.position);
+        _initialVelocity = mouseWorldPos - _firePoint.position;
+
+        Vector3 FirePointToMousePointDist = (mouseWorldPos - _firePoint.position).normalized;
+        float distancex = Mathf.Abs(mouseWorldPos.x - _firePoint.position.x);
+        float distancey = Mathf.Abs(mouseWorldPos.y - _firePoint.position.y);
+        float distancez = Mathf.Abs(mouseWorldPos.z - _firePoint.position.z);
+        Debug.Log(distancex);
+        UpdateLineRenderer();
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -57,7 +69,8 @@ public class Cannon : MonoBehaviour
 
             Rigidbody rb = cannonBall.GetComponent<Rigidbody>();
 
-            rb.velocity = Power * _firePoint.forward;
+            rb.AddForce(new Vector3(FirePointToMousePointDist.x * (Power + distancex), FirePointToMousePointDist.y * (Power + distancey), FirePointToMousePointDist.z * (Power + distancez)), ForceMode.Impulse);
+        
         }
     }
 
@@ -74,4 +87,23 @@ public class Cannon : MonoBehaviour
         return null;
     }
 
+    private void UpdateLineRenderer()
+    {
+        float g = Physics.gravity.magnitude;
+        float velocity = _initialVelocity.magnitude;
+        float angle = Mathf.Atan2(_initialVelocity.y, _initialVelocity.x);
+
+        Vector3 start = _firePoint.position;
+
+        float timeStamp = 0.1f;
+        float fTime = 0f;
+        for (int i = 0; i < N_TRAJECTORY_POINTS; i++)
+        {
+            float dx = velocity * fTime * Mathf.Cos(angle);
+            float dy = velocity * fTime * Mathf.Sin(angle) - (g * fTime * fTime / 2f);
+            Vector3 pos = new Vector3(start.x + dx, start.y + dy, start.z + dy);
+            _lineRenderer.SetPosition(i, pos);
+            fTime += timeStamp;
+        }
+    }
 }

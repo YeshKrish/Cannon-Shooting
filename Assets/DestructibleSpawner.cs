@@ -7,12 +7,12 @@ public class DestructibleSpawner : MonoBehaviour
     [SerializeField]
     private GameObject _destructible;
 
-    private int _destructibleCount = 7;
+    private int _destructibleCount = 15;
 
-    private float maxXaxis = 12f;
-    private float minXaxis = -12f;
+    private float maxXaxis = 27f;
+    private float minXaxis = -27f;
     private float maxZaxis = 13f;
-    private float minZaxis = 30f;
+    private float minZaxis = 70f;
 
     // Start is called before the first frame update
     void Start()
