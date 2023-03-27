@@ -502,6 +502,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1222603688 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9549479162299623, guid: c4b930cd27f14714cbb7f9a2bad9c889,
+    type: 3}
+  m_PrefabInstance: {fileID: 1341212907892457672}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1341212907892457672
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -569,5 +575,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cannon
       objectReference: {fileID: 0}
+    - target: {fileID: 9109653909564039350, guid: c4b930cd27f14714cbb7f9a2bad9c889,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9109653909564039350, guid: c4b930cd27f14714cbb7f9a2bad9c889,
+        type: 3}
+      propertyPath: cannonTransform
+      value: 
+      objectReference: {fileID: 1222603688}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c4b930cd27f14714cbb7f9a2bad9c889, type: 3}
