@@ -16,11 +16,11 @@ public class Ball : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.x < -28f || transform.position.x > 28f)
+        if (transform.position.x < -35f || transform.position.x > 35f)
         {
             this.gameObject.SetActive(false);
         }
-        if (transform.position.z > 75f)
+        if (transform.position.z > 60f)
         {
             this.gameObject.SetActive(false);
         }
