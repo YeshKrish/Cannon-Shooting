@@ -19,8 +19,11 @@ public class Cannon : MonoBehaviour
 
     private Vector3 _initialVelocity;
 
+    private int _activeBallCount;
+
     void Start()
     {
+        _activeBallCount = 0;
 
         _lineRenderer.positionCount = N_TRAJECTORY_POINTS;
 
@@ -35,6 +38,7 @@ public class Cannon : MonoBehaviour
 
     void Update()
     {
+        _activeBallCount = 0;
         Vector3 mousePos = Input.mousePosition;
         mousePos.z = -Camera.main.transform.position.z;
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos);
@@ -72,6 +76,15 @@ public class Cannon : MonoBehaviour
             rb.AddForce(FirePointToMousePointDist * 2f * velocity, ForceMode.Impulse);
         
         }
+
+        foreach (GameObject ballCount in _balls)
+        {
+            if(ballCount.activeSelf)
+            {
+                _activeBallCount++;
+            }
+        }
+        UIManager.Instance.Counttext.text = (_balls.Count - _activeBallCount).ToString();
     }
 
     private GameObject GetBall()
