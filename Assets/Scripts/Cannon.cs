@@ -15,8 +15,6 @@ public class Cannon : MonoBehaviour
     private int _ballsToSpawn = 10;
     private List<GameObject> _balls = new List<GameObject>();
 
-    public float Power = 1.0f;
-
     private const int N_TRAJECTORY_POINTS = 10;
 
     private Vector3 _initialVelocity;
@@ -54,17 +52,15 @@ public class Cannon : MonoBehaviour
         _initialVelocity = mouseWorldPos - _firePoint.position;
 
         Vector3 FirePointToMousePointDist = (mouseWorldPos - _firePoint.position).normalized;
-        float distancex = Mathf.Abs(mouseWorldPos.x - _firePoint.position.x);
-        float distancey = Mathf.Abs(mouseWorldPos.y - _firePoint.position.y);
-        float distancez = Mathf.Abs(mouseWorldPos.z - _firePoint.position.z);
-        Debug.Log(distancey);
-        if(distancey > 7.7f)
-        {
-            distancey = 6.5f;
-        }
+
+
+        Debug.Log(mouseWorldPos);
         UpdateLineRenderer();
 
-        if (Input.GetMouseButtonDown(0))
+        float velocity = _initialVelocity.magnitude;
+        float angle = Mathf.Atan2(_initialVelocity.y, _initialVelocity.x);
+
+        if (Input.GetMouseButtonDown(0) && mouseWorldPos.y > 1f)
         {
             GameObject cannonBall = GetBall();
             cannonBall.transform.position = _firePoint.position;
@@ -72,7 +68,7 @@ public class Cannon : MonoBehaviour
 
             Rigidbody rb = cannonBall.GetComponent<Rigidbody>();
 
-            rb.AddForce(new Vector3(FirePointToMousePointDist.x * (Power + distancex), FirePointToMousePointDist.y * (Power + distancey), FirePointToMousePointDist.z * (Power + distancez)), ForceMode.Impulse);
+            rb.AddForce(FirePointToMousePointDist * angle * velocity, ForceMode.Impulse);
         
         }
     }
@@ -83,6 +79,8 @@ public class Cannon : MonoBehaviour
         {
             if(balls.activeSelf == false)
             {
+                Rigidbody rb = balls.GetComponent<Rigidbody>();
+                rb.velocity = Vector3.zero;
                 balls.SetActive(true);
                 return balls;
             }

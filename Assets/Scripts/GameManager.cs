@@ -11,12 +11,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject _destructible;
 
-    private int _destructibleCount = 15;
+    private int _destructibleCount = 10;
 
     private float maxXaxis = 27f;
     private float minXaxis = -27f;
     private float maxZaxis = 13f;
-    private float minZaxis = 70f;
+    private float minZaxis = 56f;
 
     private List<GameObject> _destructibleObjs = new List<GameObject>();
 
@@ -93,5 +93,10 @@ public class GameManager : MonoBehaviour
 
             }
         }
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 }
