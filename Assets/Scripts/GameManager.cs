@@ -18,6 +18,10 @@ public class GameManager : MonoBehaviour
     private float maxZaxis = 13f;
     private float minZaxis = 70f;
 
+    private List<GameObject> _destructibleObjs = new List<GameObject>();
+
+    private bool _isSpawnDestructiblePressed = false;
+
     private void Awake()
     {
         if (instance == null)
@@ -34,6 +38,14 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Random.InitState(System.DateTime.Now.Millisecond);
+        for (int i = 0; i < _destructibleCount; i++)
+        {
+            float xValue = Random.Range(minXaxis, maxXaxis);
+            float zValue = Random.Range(minZaxis, maxZaxis);
+            GameObject destructible = Instantiate(_destructible, new Vector3(xValue, 4f, zValue), Quaternion.identity);
+            destructible.SetActive(false);
+            _destructibleObjs.Add(destructible);
+        }
     }
 
     // Update is called once per frame
@@ -42,14 +54,44 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void SpawnDestructible()
+    private GameObject GetDestructible()
     {
-
-        for (int i = 0; i < _destructibleCount; i++)
+        foreach (GameObject destructibles in _destructibleObjs)
         {
-            float xValue = Random.Range(minXaxis, maxXaxis);
-            float zValue = Random.Range(minZaxis, maxZaxis);
-            Instantiate(_destructible, new Vector3(xValue, 4f, zValue), Quaternion.identity);
+            if(destructibles.activeSelf == false)
+            {
+                destructibles.SetActive(true);
+                return destructibles;
+            }
+        }
+        return null;
+    }
+
+    public void SpawnDestructible()
+    { 
+        if(_isSpawnDestructiblePressed == false)
+        {
+            for (int i = 0; i < _destructibleCount; i++)
+            {
+                GameObject destructible = GetDestructible();   
+            }
+            _isSpawnDestructiblePressed = true;
+        }
+        else
+        {
+            foreach(GameObject destructible in _destructibleObjs)
+            {
+                destructible.SetActive(false);
+            }
+            for (int i = 0; i < _destructibleCount; i++)
+            {
+                float xValue = Random.Range(minXaxis, maxXaxis);
+                float zValue = Random.Range(minZaxis, maxZaxis);
+                GameObject destructible = GetDestructible();
+                destructible.transform.position = new Vector3(xValue, 4f, zValue);
+                destructible.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+
+            }
         }
     }
 }

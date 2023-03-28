@@ -22,14 +22,14 @@ public class Ball : MonoBehaviour
     {
         if (transform.position.x < -28f || transform.position.x > 28f)
         {
-            transform.position = _originalPos;
-            transform.rotation = Quaternion.Euler(_originalRotation);
+            //transform.position = _originalPos;
+            //transform.rotation = Quaternion.Euler(_originalRotation);
             this.gameObject.SetActive(false);
         }
         if (transform.position.z > 75f)
         {
-            transform.position = _originalPos;
-            transform.rotation = Quaternion.Euler(_originalRotation);
+            //transform.position = _originalPos;
+            //transform.rotation = Quaternion.Euler(_originalRotation);
             this.gameObject.SetActive(false);
         }
     }
@@ -40,7 +40,6 @@ public class Ball : MonoBehaviour
         {
             GameObject _explosionInstance = Instantiate(_explosionParticle, collision.transform.position, collision.transform.rotation);
             this.gameObject.SetActive(false);
-            collision.gameObject.SetActive(false);
             Destroy(_explosionInstance, 3f);
         }
     }
