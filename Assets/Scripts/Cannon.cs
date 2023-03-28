@@ -59,6 +59,7 @@ public class Cannon : MonoBehaviour
 
         float velocity = _initialVelocity.magnitude;
         float angle = Mathf.Atan2(_initialVelocity.y, _initialVelocity.x);
+        Debug.Log(angle);
 
         if (Input.GetMouseButtonDown(0) && mouseWorldPos.y > 1f)
         {
@@ -68,7 +69,7 @@ public class Cannon : MonoBehaviour
 
             Rigidbody rb = cannonBall.GetComponent<Rigidbody>();
 
-            rb.AddForce(FirePointToMousePointDist * angle * velocity, ForceMode.Impulse);
+            rb.AddForce(FirePointToMousePointDist * 2f * velocity, ForceMode.Impulse);
         
         }
     }
