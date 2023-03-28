@@ -128,3 +128,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _explosionParticle: {fileID: 100000, guid: 10f42fca98dc28042b22d432c3e4095b, type: 3}
+  _explosionSound: {fileID: 0}
