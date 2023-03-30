@@ -21,8 +21,15 @@ public class Cannon : MonoBehaviour
 
     private int _activeBallCount;
 
+    [SerializeField]
+    private GameObject _circleImage;
+
+    private GameObject _cicle;
+
     void Start()
     {
+        _cicle = Instantiate(_circleImage, Vector3.up, Quaternion.Euler(new Vector3(90f, 0f, 0f))).gameObject;
+
         _activeBallCount = 0;
 
         _lineRenderer.positionCount = N_TRAJECTORY_POINTS;
@@ -58,12 +65,17 @@ public class Cannon : MonoBehaviour
         Vector3 FirePointToMousePointDist = (mouseWorldPos - _firePoint.position).normalized;
 
 
-        Debug.Log(mouseWorldPos);
+        //Debug.Log(mouseWorldPos);
         UpdateLineRenderer();
 
         float velocity = _initialVelocity.magnitude;
-        float angle = Mathf.Atan2(_initialVelocity.y, _initialVelocity.x);
-        Debug.Log(angle);
+        float dot = Vector3.Dot(_firePoint.forward, FirePointToMousePointDist);
+        float angle = Mathf.Acos(dot);
+
+        Debug.Log(FirePointToMousePointDist);
+        Vector3 dir = AngToDir(angle);
+        Vector3 newPos = new Vector3(dir.x, _cicle.transform.position.y, dir.z) + new Vector3(_initialVelocity.x, 0f, _initialVelocity.z );
+        _cicle.transform.position = newPos;
 
         if (Input.GetMouseButtonDown(0) && mouseWorldPos.y > 1f)
         {
@@ -73,7 +85,7 @@ public class Cannon : MonoBehaviour
 
             Rigidbody rb = cannonBall.GetComponent<Rigidbody>();
 
-            rb.AddForce(FirePointToMousePointDist * 2f * velocity, ForceMode.Impulse);
+            rb.AddForce(FirePointToMousePointDist * 2f * velocity * angle, ForceMode.Impulse);
         
         }
 
@@ -85,6 +97,13 @@ public class Cannon : MonoBehaviour
             }
         }
         UIManager.Instance.Counttext.text = (_balls.Count - _activeBallCount).ToString();
+    }
+
+    private Vector3 AngToDir(float ang)
+    {
+        float x = Mathf.Cos(ang);
+        float y = Mathf.Sin(ang);
+        return new Vector3(x, y, 0f);
     }
 
     private GameObject GetBall()
